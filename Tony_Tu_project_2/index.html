@@ -1,0 +1,164 @@
+<head>
+    <title>CS194-26 Project#2 Report</title>
+    <title>Tony Tu SID:3033048631</title>
+    <style>
+        img.mid {
+            width: 50%;
+            height: auto;
+            padding: 10px;
+        }
+        img {
+            width: 90%;
+            height: auto;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>CS194-26 Project#2 Report</h1>
+        <h1>Name: Tony Tu</h1>
+        <h1>SID: 3033048631</h1>
+        <h1>Part 1</h1>
+        <div>
+            <h2>Part 1.1</h2>
+            <p>The gradient magnitude image is calculated with the following steps:</p>
+            <ol>
+                <li>Convolve the image with finite difference operators (D_x and D_y) to obtain the gradient of each pixel along x and y axis.</li>
+                <li>Calculate the norm of the gradient at each pixel. Suppose the gradient along the x and y axis are G_x and G_y respectively. Then the norm of the gradient is (G_x^2 + G_y^2)^(0.5)</li>
+            </ol>
+            <p>The resulting image is:</p>
+            <img src="./res/1-1-1.jpg">
+        </div>
+
+
+        <div>
+            <h2>Part 1.2</h2>
+            <p>The results are as follows.</p>
+            <ul>
+                <li>Gradient along x axis:</li>
+                <img src="./res/1-2-1.jpg">
+                <li>Gradient along y axis:</li>
+                <img src="./res/1-2-2.jpg">
+                <li>Gradient magnitude:</li>
+                <img src="./res/1-2-3.jpg">
+            </ul>
+            <p>The resulting image has clearer edges and less noise. It identifies the edges better without introducing as much noise as before.</p>
+        </div>
+
+        <div>
+            <h2>Part 1.3</h2>
+            <ul>
+                <li>Example image:</li>
+                <img src="./res/1-3-facade.jpg">
+                <li>Case 1:</li>
+                <img src="./res/1-3-tahoe.jpg">
+                <li>Case 2:</li>
+                <img src="./res/1-3-mountain.jpg">
+                <li>Case 3 (failure):</li>
+                <img src="./res/1-3-taj-mahal.jpg">
+            </ul>
+        </div>
+
+        <h1>Part 2</h1>
+        <div>
+            <h2>Part 2.1</h2>
+
+            <div>
+                <p>Sharpening of the example image:</p>
+                <ul>
+                    <li>Original image:</li>
+                    <img class="mid" src="./res/2-1-1-1.jpg">
+                    <li>Sharpened image:</li>
+                    <img class="mid" src="./res/2-1-1-2.jpg">
+                </ul>
+            </div>
+
+            <div>
+                <p>Blurring and resharpening another image:</p>
+                <ul>
+                    <li>Original image:</li>
+                    <img class="mid" src="./res/2-1-2-1.jpg">
+                    <li>Blurred image:</li>
+                    <img class="mid" src="./res/2-1-2-2.jpg">
+                    <li>Sharpened image:</li>
+                    <img class="mid" src="./res/2-1-2-3.jpg">
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <h2>Part 2.2</h2>
+            <ul>
+                <li>Example image</li>
+                <p>Steps:</p>
+                <img class="mid" src="./res/2-2-1-analysis.jpg">
+                <p>Result:</p>
+                <img class="mid" src="./res/hybrid-2-2-1.jpg">
+
+                <li>Water and Paint (no color)</li>
+                <p>Steps:</p>
+                <img class="mid" src="./res/2-2-2-analysis.jpg">
+                <p>Result:</p>
+                <img class="mid" src="./res/hybrid-2-2-2.jpg">
+
+                <li>Failed attemp</li>
+                <p>Steps:</p>
+                <img class="mid" src="./res/2-2-4-analysis.jpg">
+                <p>Result:</p>
+                <img class="mid" src="./res/hybrid-2-2-4.jpg">
+            </ul>
+
+            <p>Extra credit:</p>
+            Color on high frequency provides more details and works better.
+            <ul>
+                <li>Water and Paint (with color)</li>
+                <p>Steps:</p>
+                <img class="mid" src="./res/2-2-3-analysis.jpg">
+                <p>Result:</p>
+                <img class="mid" src="./res/hybrid-2-2-3.jpg">
+
+                <li>Example (with color)</li>
+                <p>Steps:</p>
+                <img class="mid" src="./res/2-2-5-analysis.jpg">
+                <p>Result:</p>
+                <img class="mid" src="./res/hybrid-2-2-5.jpg">
+            </ul>
+        </div>
+
+        <div>
+            <h2>Part 2.3</h2>
+            <p>Example 1:</p>
+            <img src="./res/2-3-1.jpg">
+            <p>Example 2:</p>
+            <img src="./res/2-3-3.jpg">
+        </div>
+
+        <div>
+            <h2>Part 2.4</h2>
+            <ul>
+                <li>Apple + Orange</li>
+                <p>Effect:</p>
+                <img src="./res/2-4-1.jpg">
+                <p>Process:</p>
+                <img src="./res/2-4-1-1.jpg">
+
+                <li>Moon + Jupiter</li>
+                <p>Effect:</p>
+                <img src="./res/2-4-2.jpg">
+                <p>Process:</p>
+                <img src="./res/2-4-2-1.jpg">
+
+                <li>Man + Taj Mahal (irregular mask)</li>
+                <p>Effect:</p>
+                <img src="./res/2-4-3.jpg">
+                <p>Mask:</p>
+                <img class="mid" src="./res/man_mask.jpg">
+                <p>Process:</p>
+                <img src="./res/2-4-3-1.jpg">
+            </ul>
+        </div>
+
+    </div>
+</body>
