@@ -1,0 +1,175 @@
+<h1 id="project-4-facial-keypoint-detection-with-neural-networks">Project 4. Facial Keypoint Detection with Neural Networks</h1>
+<h2 id="author-">Author:Tony Tu</h2>
+<p><a href="#part-1-nose-tip-detection">Part 1: Nose Tip Detection</a><br>
+<a href="#sampled-image-from-my-dataloader">Sampled image from my dataloader</a><br>
+<a href="#the-train-and-validation-accuracy">The train and validation accuracy</a><br>
+<a href="#examples-of-applying-ntd-to-the-images">Examples of applying NTD to the images</a><br>
+<a href="#part-2-full-facial-keypoints-detection">Part 2: Full Facial Keypoints Detection</a><br>
+<a href="#sampled-image-from-my-dataloader-1">Sampled image from my dataloader</a><br>
+<a href="#the-detailed-architecture">The detailed architecture</a><br>
+<a href="#the-train-and-validation-loss">The train and validation loss</a><br>
+<a href="#the-learned-filters-visualization">The Learned Filters Visualization</a><br>
+<a href="#part-3-train-with-larger-dataset">Part 3: Train With Larger Dataset</a><br>
+<a href="#sampled-image-from-my-dataloader-2">Sampled image from my dataloader</a><br>
+<a href="#the-detailed-architecture-1">The detailed architecture</a><br>
+<a href="#examples-of-applying-fkd-to-the-images">Examples of applying FKD to the images</a></p>
+<h2 id="part-1-nose-tip-detection">Part 1: Nose Tip Detection</h2>
+<p>This part is to do single-point detection on small image dataset, with each is 80*60.</p>
+<h3 id="1-sampled-image-from-my-dataloader">1. Sampled image from my dataloader</h3>
+<p><img src="p1-nose-1.png" alt="image"> <img src="p1-nose-2.png" alt="image"><img src="p1-nose-3.png" alt="image"> <img src="p1-nose-4.png" alt="image"><br>
+We show several examples here.</p>
+<h3 id="2-the-train-and-validation-accuracy">2. The train and validation accuracy</h3>
+<p><img src="training-accuracy.png" alt="img"><br>
+We use OCU as the accuracy, while OCU is defined below:
+OCU = Overlap(y_train, outputs)/Union(y_train, outputs)</p>
+<h3 id="3-examples-of-applying-ntd-to-the-images">3. Examples of applying NTD to the images</h3>
+<p><img src="p1-success-1.png" alt="img"><img src="p1-success-2.png" alt="img"><br>
+These are two success examples.
+<img src="p1-fail-1.png" alt="img"><img src="p1-fail-2.png" alt="img"><br>
+These are two fail examples.</p>
+<p>The number of data samples is too small.</p>
+<h2 id="part-2-full-facial-keypoints-detection">Part 2: Full Facial Keypoints Detection</h2>
+<p>In this part, it turns to predict all 58 points in each photo.</p>
+<h3 id="1-sampled-image-from-my-dataloader">1. Sampled image from my dataloader</h3>
+<p><img src="p2-rotation-1.png" alt="image"> <img src="p2-rotation-2.png" alt="image"><img src="p2-rotation-3.png" alt="image"> <img src="p2-rotation-4.png" alt="image"><br>
+We show some examples after we do rotation on these photos.</p>
+<h3 id="2-the-detailed-architecture">2. The detailed architecture</h3>
+<p><img src="cnn.jpg" alt="image"><br>
+This is the 6 conv-layers CNN architecture we use.</p>
+<h3 id="3-the-train-and-validation-loss">3. The train and validation loss</h3>
+<p><img src="training-loss.png" alt="image"><br>
+We use MSELoss as the loss function and this figure shows the tendency.</p>
+<h3 id="4-the-learned-filters-visualization">4. The Learned Filters Visualization</h3>
+<p><img src="conv1.png" alt="image">
+<img src="conv2.png" alt="image">
+<img src="conv3.png" alt="image">
+<img src="conv4.png" alt="image">
+<img src="conv5.png" alt="image">
+<img src="conv6.png" alt="image"><br>
+We visualize all size conv-layers in this CNN.</p>
+<h2 id="part-3-train-with-larger-dataset">Part 3: Train With Larger Dataset</h2>
+<h3 id="1-sampled-image-from-my-dataloader">1. Sampled image from my dataloader</h3>
+<p><img src="p3-wrongBox-1.png" alt="image"><img src="p3-wrongBox-2.png" alt="image">
+<img src="p3-wrong-1.png" alt="image"><img src="p3-wrong-2.png" alt="image"></p>
+<p><br>There is a big shortage when using the given box to crop the photo. Some points cannot be covered.</p>
+<p><img src="p3-successBox-1.png" alt="image"><img src="p3-successBox-2.png" alt="image"><br>
+Therefore, we use our own scheme to crop the images and the results are shown above, which is better then using the bounded box.</p>
+<h3 id="2-the-detailed-architecture">2. The detailed architecture</h3>
+<pre><code>myNet(
+  (<span class="hljs-name">resnet18</span>): ResNet(
+    (<span class="hljs-name">conv1</span>): Conv2d(<span class="hljs-number">3</span>, <span class="hljs-number">64</span>, kernel_size=(<span class="hljs-number">7</span>, <span class="hljs-number">7</span>), stride=(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>), padding=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), bias=False)
+    (<span class="hljs-name">bn1</span>): BatchNorm2d(<span class="hljs-number">64</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+    (<span class="hljs-name">relu</span>): ReLU(<span class="hljs-name">inplace=True</span>)
+    (<span class="hljs-name">maxpool</span>): MaxPool2d(<span class="hljs-name">kernel_size=3</span>, stride=2, padding=1, dilation=1, ceil_mode=False)
+    (<span class="hljs-name">layer1</span>): Sequential(
+      (<span class="hljs-number">0</span>): BasicBlock(
+        (<span class="hljs-name">conv1</span>): Conv2d(<span class="hljs-number">64</span>, <span class="hljs-number">64</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn1</span>): BatchNorm2d(<span class="hljs-number">64</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">relu</span>): ReLU(<span class="hljs-name">inplace=True</span>)
+        (<span class="hljs-name">conv2</span>): Conv2d(<span class="hljs-number">64</span>, <span class="hljs-number">64</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn2</span>): BatchNorm2d(<span class="hljs-number">64</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+      )
+      (<span class="hljs-number">1</span>): BasicBlock(
+        (<span class="hljs-name">conv1</span>): Conv2d(<span class="hljs-number">64</span>, <span class="hljs-number">64</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn1</span>): BatchNorm2d(<span class="hljs-number">64</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">relu</span>): ReLU(<span class="hljs-name">inplace=True</span>)
+        (<span class="hljs-name">conv2</span>): Conv2d(<span class="hljs-number">64</span>, <span class="hljs-number">64</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn2</span>): BatchNorm2d(<span class="hljs-number">64</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+      )
+    )
+    (<span class="hljs-name">layer2</span>): Sequential(
+      (<span class="hljs-number">0</span>): BasicBlock(
+        (<span class="hljs-name">conv1</span>): Conv2d(<span class="hljs-number">64</span>, <span class="hljs-number">128</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn1</span>): BatchNorm2d(<span class="hljs-number">128</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">relu</span>): ReLU(<span class="hljs-name">inplace=True</span>)
+        (<span class="hljs-name">conv2</span>): Conv2d(<span class="hljs-number">128</span>, <span class="hljs-number">128</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn2</span>): BatchNorm2d(<span class="hljs-number">128</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">downsample</span>): Sequential(
+          (<span class="hljs-number">0</span>): Conv2d(<span class="hljs-number">64</span>, <span class="hljs-number">128</span>, kernel_size=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), stride=(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>), bias=False)
+          (<span class="hljs-number">1</span>): BatchNorm2d(<span class="hljs-number">128</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        )
+      )
+      (<span class="hljs-number">1</span>): BasicBlock(
+        (<span class="hljs-name">conv1</span>): Conv2d(<span class="hljs-number">128</span>, <span class="hljs-number">128</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn1</span>): BatchNorm2d(<span class="hljs-number">128</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">relu</span>): ReLU(<span class="hljs-name">inplace=True</span>)
+        (<span class="hljs-name">conv2</span>): Conv2d(<span class="hljs-number">128</span>, <span class="hljs-number">128</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn2</span>): BatchNorm2d(<span class="hljs-number">128</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+      )
+    )
+    (<span class="hljs-name">layer3</span>): Sequential(
+      (<span class="hljs-number">0</span>): BasicBlock(
+        (<span class="hljs-name">conv1</span>): Conv2d(<span class="hljs-number">128</span>, <span class="hljs-number">256</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn1</span>): BatchNorm2d(<span class="hljs-number">256</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">relu</span>): ReLU(<span class="hljs-name">inplace=True</span>)
+        (<span class="hljs-name">conv2</span>): Conv2d(<span class="hljs-number">256</span>, <span class="hljs-number">256</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn2</span>): BatchNorm2d(<span class="hljs-number">256</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">downsample</span>): Sequential(
+          (<span class="hljs-number">0</span>): Conv2d(<span class="hljs-number">128</span>, <span class="hljs-number">256</span>, kernel_size=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), stride=(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>), bias=False)
+          (<span class="hljs-number">1</span>): BatchNorm2d(<span class="hljs-number">256</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        )
+      )
+      (<span class="hljs-number">1</span>): BasicBlock(
+        (<span class="hljs-name">conv1</span>): Conv2d(<span class="hljs-number">256</span>, <span class="hljs-number">256</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn1</span>): BatchNorm2d(<span class="hljs-number">256</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">relu</span>): ReLU(<span class="hljs-name">inplace=True</span>)
+        (<span class="hljs-name">conv2</span>): Conv2d(<span class="hljs-number">256</span>, <span class="hljs-number">256</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn2</span>): BatchNorm2d(<span class="hljs-number">256</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+      )
+    )
+    (<span class="hljs-name">layer4</span>): Sequential(
+      (<span class="hljs-number">0</span>): BasicBlock(
+        (<span class="hljs-name">conv1</span>): Conv2d(<span class="hljs-number">256</span>, <span class="hljs-number">512</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn1</span>): BatchNorm2d(<span class="hljs-number">512</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">relu</span>): ReLU(<span class="hljs-name">inplace=True</span>)
+        (<span class="hljs-name">conv2</span>): Conv2d(<span class="hljs-number">512</span>, <span class="hljs-number">512</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn2</span>): BatchNorm2d(<span class="hljs-number">512</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">downsample</span>): Sequential(
+          (<span class="hljs-number">0</span>): Conv2d(<span class="hljs-number">256</span>, <span class="hljs-number">512</span>, kernel_size=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), stride=(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>), bias=False)
+          (<span class="hljs-number">1</span>): BatchNorm2d(<span class="hljs-number">512</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        )
+      )
+      (<span class="hljs-number">1</span>): BasicBlock(
+        (<span class="hljs-name">conv1</span>): Conv2d(<span class="hljs-number">512</span>, <span class="hljs-number">512</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn1</span>): BatchNorm2d(<span class="hljs-number">512</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+        (<span class="hljs-name">relu</span>): ReLU(<span class="hljs-name">inplace=True</span>)
+        (<span class="hljs-name">conv2</span>): Conv2d(<span class="hljs-number">512</span>, <span class="hljs-number">512</span>, kernel_size=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), stride=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), padding=(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), bias=False)
+        (<span class="hljs-name">bn2</span>): BatchNorm2d(<span class="hljs-number">512</span>, eps=1e-05, momentum=0.<span class="hljs-number">1</span>, affine=True, track_running_stats=True)
+      )
+    )
+    (<span class="hljs-name">avgpool</span>): AdaptiveAvgPool2d(<span class="hljs-name">output_size=</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>))
+    (<span class="hljs-name">fc</span>): Linear(<span class="hljs-name">in_features=512</span>, out_features=136, bias=True)
+  )
+)
+</code></pre><p>We uses to train a VGG Net, but its performance is not quite good. 
+We use the sque(MSELoss) to replace the MSELoss.
+We use a lr schduler to change the learning rate at runtime.</p>
+<pre><code>
+def loss_cus(outputs, batch_y):
+    loss = torch.<span class="hljs-built_in">sqrt</span>(F.mse_loss(outputs, batch_y))
+    <span class="hljs-literal">return</span> loss
+
+<span class="hljs-comment"># nn.MSELoss()</span>
+loss_fn = loss_cus
+lr = <span class="hljs-number">0.1</span>
+optimizer = Adam(cnn.parameters(), lr=<span class="hljs-number">0.1</span>, betas=(<span class="hljs-number">0.9</span>, <span class="hljs-number">0.999</span>))
+
+lr = <span class="hljs-number">0.1</span>
+<span class="hljs-keyword">if</span> i &lt; <span class="hljs-number">3</span>:
+    <span class="hljs-keyword">for</span> <span class="hljs-built_in">param</span> <span class="hljs-keyword">in</span> optimizer.param_groups:
+        <span class="hljs-built_in">param</span>[<span class="hljs-string">'lr'</span>] = lr
+elif i &lt; <span class="hljs-number">5</span>:
+    <span class="hljs-keyword">for</span> <span class="hljs-built_in">param</span> <span class="hljs-keyword">in</span> optimizer.param_groups:
+        <span class="hljs-built_in">param</span>[<span class="hljs-string">'lr'</span>] = lr * <span class="hljs-number">0.1</span>
+elif i &lt; <span class="hljs-number">8</span>:
+    <span class="hljs-keyword">for</span> <span class="hljs-built_in">param</span> <span class="hljs-keyword">in</span> optimizer.param_groups:
+        <span class="hljs-built_in">param</span>[<span class="hljs-string">'lr'</span>] = lr * <span class="hljs-number">0.01</span>
+<span class="hljs-keyword">else</span>:
+    <span class="hljs-keyword">for</span> <span class="hljs-built_in">param</span> <span class="hljs-keyword">in</span> optimizer.param_groups:
+        <span class="hljs-built_in">param</span>[<span class="hljs-string">'lr'</span>] = lr * <span class="hljs-number">0.005</span>
+</code></pre><h3 id="3-examples-of-applying-fkd-to-the-images">3. Examples of applying FKD to the images</h3>
+<p><img src="p3-success-1.png" alt="image"><img src="p3-success-2.png" alt="image"><br>
+two success examples <br>
+<img src="p3-fail-1.png" alt="image"><img src="p3-fail-2.png" alt="image"><br>
+two fail examples </p>
+
